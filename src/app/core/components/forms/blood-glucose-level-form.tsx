@@ -30,7 +30,10 @@ export const BloodGlucoseForm: React.FC<{
   };
 
   return (
-    <form className="grid gap-4 w-[60%]" onSubmit={handleSubmit(handleForm)}>
+    <form
+      className="grid gap-4 w-full lg:w-[60%]"
+      onSubmit={handleSubmit(handleForm)}
+    >
       <Image
         src={"/images/blood_glucose.png"}
         alt=""

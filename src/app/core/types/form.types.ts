@@ -18,7 +18,7 @@ export type GenderValue = InputValueWithImage<GenderType>;
 export const genderOptions: GenderValue[] = [
   { value: "male", src: "images/male.png" },
   { value: "female", src: "images/female.png" },
-  { value: "other", src: "images/trash.png" },
+  { value: "other", src: "images/other.png" },
 ];
 
 export type HypertensionValue = InputValueWithImage<boolean>;

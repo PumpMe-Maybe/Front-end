@@ -1,6 +1,6 @@
 "use client";
-import { DefaultLayout } from "@/app/core/apps/components/layouts/default-layout";
-import { DiabeteForm } from "@/app/core/apps/components/forms/diabete-form";
+import { DefaultLayout } from "@/app/core/components/layouts/default-layout";
+import { DiabeteForm } from "@/app/core/components/diabete-form";
 import { useState } from "react";
 
 export type HomeStep =
@@ -19,7 +19,7 @@ export const HomeContainer = () => {
   const [step, setStep] = useState<HomeStep>("begin");
 
   return (
-    <DefaultLayout>
+    <DefaultLayout step={step}>
       <div className="relative w-[80%] h-full mx-auto text-center flex flex-col items-center justify-center gap-4">
         <DiabeteForm step={step} setStep={setStep} />
       </div>

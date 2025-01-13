@@ -30,7 +30,10 @@ export const BmiForm: React.FC<{
   };
 
   return (
-    <form className="grid gap-6 w-[60%]" onSubmit={handleSubmit(handleForm)}>
+    <form
+      className="grid gap-6 w-full lg:w-[60%]"
+      onSubmit={handleSubmit(handleForm)}
+    >
       <Image
         src={"/images/bmi.png"}
         alt=""

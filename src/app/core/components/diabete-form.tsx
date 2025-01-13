@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { HomeStep } from "../home-container";
-import { ProgressBar } from "../layouts/default-layout/progressBar";
+import { HomeStep } from "./home-container";
+import { ProgressBar } from "./layouts/default-layout/progressBar";
 import { FormPayload } from "@/app/core/types/form.types";
 import { GenderForm } from "@/app/core/components/forms/gender-form";
 import { HypertensionForm } from "@/app/core/components/forms/hypertension-form";
@@ -11,12 +11,17 @@ import { AgeForm } from "@/app/core/components/forms/age-form";
 import { Hba1cForm } from "@/app/core/components/forms/hba1c-form";
 import { BloodGlucoseForm } from "@/app/core/components/forms/blood-glucose-level-form";
 import { BmiForm } from "@/app/core/components/forms/bmi-form";
+import { SuccessPage } from "./success-page";
+import { BeginPage } from "./begin-page";
+import axios from "axios";
+import { SuccessFalsePage } from "./success-false-page";
 
 export const DiabeteForm: React.FC<{
   step: HomeStep;
   setStep: (_value: HomeStep) => void;
 }> = ({ step, setStep }) => {
   const [data, setData] = useState<FormPayload | null>(null);
+  const [result, setResult] = useState<boolean | null>(null);
 
   const valueProgress = useMemo(() => {
     const totalSteps = 7;
@@ -36,8 +41,18 @@ export const DiabeteForm: React.FC<{
   }, [step]);
 
   const handleSave = async (payload: FormPayload) => {
-    setData(payload);
-    console.log(data);
+    try {
+      setData(payload);
+      const response = await axios.post(
+        "https://back-end-1-cvsl.onrender.com/predict",
+        payload
+      );
+      console.log(response.data);
+      setResult(response.data.prediction);
+      setStep("success");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -45,7 +60,7 @@ export const DiabeteForm: React.FC<{
       {step !== "success" && step !== "begin" && (
         <ProgressBar value={valueProgress} />
       )}
-      {step === "begin" && <BeginForm onClick={() => setStep("gender")} />}
+      {step === "begin" && <BeginPage onStart={() => setStep("gender")} />}
       {step === "gender" && (
         <GenderForm
           onChange={(value) => {
@@ -118,31 +133,19 @@ export const DiabeteForm: React.FC<{
               (prevData) =>
                 ({ ...prevData, blood_glucose_level: value } as FormPayload)
             );
-            handleSave(data as FormPayload);
+            handleSave({
+              ...data,
+              blood_glucose_level: value,
+            } as FormPayload);
           }}
         />
       )}
+      {step === "success" && result === true && (
+        <SuccessPage onRestart={() => setStep("begin")} />
+      )}
+      {step === "success" && result === false && (
+        <SuccessFalsePage onRestart={() => setStep("begin")} />
+      )}
     </>
-  );
-};
-
-const BeginForm: React.FC<{
-  onClick: () => void;
-}> = ({ onClick }) => {
-  return (
-    <div className="grid gap-10">
-      <h1 className="lg:text-[55px] ">PumpMe, Maybe ?</h1>
-      <div>
-        <h2 className="lg:text-[20px]">Tu veux savoir si tu es diabétique ?</h2>
-        <p>Remplit ce formulaire de 8 questions pour le savoir !</p>
-      </div>
-
-      <button
-        className="w-[400px] h-40 text-3xl font-bold text-center bg-blue-600 rounded-[0.25rem] py-2 text-white mx-auto"
-        onClick={onClick}
-      >
-        Démarrer le quiz !
-      </button>
-    </div>
   );
 };

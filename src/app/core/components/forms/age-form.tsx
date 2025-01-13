@@ -8,7 +8,7 @@ import { TextInput } from "../inputs/text-input";
 import Image from "next/image";
 
 export const AgeForm: React.FC<{
-  onChange: (_payload: string) => void;
+  onChange: (_payload: number) => void;
 }> = ({ onChange }) => {
   const {
     handleSubmit,
@@ -28,7 +28,10 @@ export const AgeForm: React.FC<{
   };
 
   return (
-    <form onSubmit={handleSubmit(handleForm)} className="grid gap-10 w-[60%]">
+    <form
+      onSubmit={handleSubmit(handleForm)}
+      className="grid gap-10 w-full lg:w-[60%]"
+    >
       <Image
         src={"/images/age.png"}
         alt=""
