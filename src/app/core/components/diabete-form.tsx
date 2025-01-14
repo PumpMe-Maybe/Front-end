@@ -45,6 +45,7 @@ export const DiabeteForm: React.FC<{
       setData(payload);
       const response = await axios.post(
         "https://back-end-1-cvsl.onrender.com/predict",
+        // "https://ai-back-55oj.onrender.com/predict",
         payload
       );
       console.log(response.data);
